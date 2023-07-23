@@ -23,23 +23,18 @@ export class App extends Component {
   };
 
   handleSubmit = e => {
-    e.preventDefault();
     const id = nanoid();
-    const name = this.state.name;
-    const number = this.state.number;
+    const name = e.name;
+    const number = e.number;
     const contactsLists = [...this.state.contacts];
-
-    if (!name || !number) {
-      alert("Please provide a name and a number.");
-      return;
-    }
 
     if (contactsLists.findIndex(contact => name === contact.name) !== -1) {
       alert(`${name} is already in contacts.`);
     } else {
       contactsLists.push({ name, id, number });
-      this.setState({ contacts: contactsLists, name: '', number: '' });
     }
+
+    this.setState({ contacts: contactsLists });
   };
 
   handleDelete = id => {
@@ -91,4 +86,3 @@ export class App extends Component {
     );
   }
 }
-
