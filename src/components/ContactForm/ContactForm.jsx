@@ -14,11 +14,28 @@ export class ContactForm extends Component {
     };
 
     handleSubmit = e => {
-        e.preventDefault();
-        const form = e.currentTarget;
-        this.props.handleSubmit(this.state);
-        form.reset();
+    e.preventDefault();
+    const { name, number } = this.state;
+
+    if (!this.isValidName(name) || !this.isValidNumber(number)) {
+        alert("Please provide a valid name and phone number.");
+        return;
+    }
+
+    this.props.handleSubmit({ name, number });
+    this.setState({ name: '', number: '' });
+};
+
+    isValidName = name => {
+    const nameRegex = /^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/;
+    return nameRegex.test(name);
     };
+
+    isValidNumber = number => {
+    const numberRegex = /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/;
+    return numberRegex.test(number);
+    };
+
 
     render() {
     const { name, number } = this.state;
