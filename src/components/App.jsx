@@ -13,42 +13,40 @@ export class App extends Component {
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    name: '',
-    number: '',
   };
 
-  handleChange = e => {
+  handleChange = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
 
-  handleSubmit = e => {
+  handleSubmit = (contactData) => {
+    const { name, number } = contactData;
     const id = nanoid();
-    const name = e.name;
-    const number = e.number;
-    const contactsLists = [...this.state.contacts];
+    const contactsList = [...this.state.contacts];
 
-    if (contactsLists.findIndex(contact => name === contact.name) !== -1) {
+    const lowerCaseName = name.toLowerCase();
+
+    if (contactsList.some((contact) => contact.name.toLowerCase() === lowerCaseName)) {
       alert(`${name} is already in contacts.`);
     } else {
-      contactsLists.push({ name, id, number });
+      contactsList.push({ name, id, number });
     }
 
-    this.setState({ contacts: contactsLists });
+    this.setState({ contacts: contactsList });
   };
 
-  handleDelete = id => {
-    this.setState(prevState => ({
-      contacts: prevState.contacts.filter(contact => contact.id !== id),
+  handleDelete = (id) => {
+    this.setState((prevState) => ({
+      contacts: prevState.contacts.filter((contact) => contact.id !== id),
     }));
   };
 
   getFilteredContacts = () => {
-    const filterContactsList = this.state.contacts.filter(contact => {
-      return contact.name.toLowerCase().includes(this.state.filter.toLowerCase());
-    });
-
-    return filterContactsList;
+    const { filter, contacts } = this.state;
+    return contacts.filter((contact) =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
+    );
   };
 
   render() {
